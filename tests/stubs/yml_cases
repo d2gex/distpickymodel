@@ -1,0 +1,197 @@
+#------------------------------------------------------------------------------------
+#     Testing Boundaries
+#------------------------------------------------------------------------------------
+
+# Instructions that do not have a dictionary
+no_dict_first_level_test_case_0:
+  - div:
+    - item: enough to show this is a list
+
+# 'max-items' keyword has the wrong type
+max_link_test_case_1:
+  div:
+      - id: col-A
+      - article:
+        - max-items: I'm a string
+        - data-vr-contentbox: Noticia
+        - h1:
+          - class: titular
+          - do: catch
+
+
+# 'max-items' keyword has the wrong value
+max_link_test_case_2:
+  div:
+      - id: col-A
+      - article:
+        - max-items: -1
+        - data-vr-contentbox: Noticia
+        - h1:
+          - class: titular
+          - do: catch
+
+# 'do' has the wrong value. It only accepts catch
+do_test_case_3:
+  div:
+      - id: col-A
+      - article:
+        - max-items: 10
+        - data-vr-contentbox: Noticia
+        - h1:
+          - class: titular
+          - do: something different to catch
+
+# 'do' keyword is missing
+do_test_case_4:
+  div:
+      - id: col-A
+      - article:
+        - max-items: 10
+        - data-vr-contentbox: Noticia
+        - h1:
+          - class: titular
+          - no_do_keyword: catch
+
+
+# dicts prior to lists are always taken into account in the level where they are. For example
+# max-items will be taken into account at the level formed by list 'article' - 2nd level
+dicts_prior_to_lists_test_case_5:
+  div:
+      - id: col-A
+      - article:
+        - max-items: 10
+        - data-vr-contentbox: Noticia
+        - h1:
+          - class: titular
+          - do: catch
+
+# Contrary to the earlier example, dicts after list within the same level are ignored. max-items will be ignored
+lists_prior_to_dicts_test_case_6:
+  div:
+      - id: col-A
+      - article:
+        - data-vr-contentbox: Noticia
+        - h1:
+          - class: titular
+          - do: catch
+        - max-items: 10
+
+#------------------------------------------------------------------------------------
+#     Testing True Positives
+#------------------------------------------------------------------------------------
+
+# HTML Document structure with one single element to catch
+root_level_element_test_case_7:
+  h1:
+    - class: test_case_7
+    - do: catch
+
+
+# HTML Document with more elements to catch than those desired by max-items
+max_link_lower_boundary_test_case_8:
+  div:
+      - id: col-A
+      - article:
+        - max-items: 1
+        - data-vr-contentbox: Noticia
+        - h1:
+          - class: titular
+          - do: catch
+
+# HTML Document with less elements to catch than those desired by max-items
+max_link_upper_boundary_test_case_9:
+  div:
+      - id: col-A
+      - article:
+        - max-items: 4
+        - data-vr-contentbox: Noticia
+        - h1:
+          - class: titular
+          - do: catch
+
+# Instructions with nested max-items and max-items set to 0 when max-link isn't in the last level
+nested_max_links_test_case_10:
+  div:
+      - id: col-B
+      - aside:
+        - max-items: 0
+        - article:
+          - data-vr-contentbox: Noticia
+          - max-items: 0
+          - h1:
+            - class: titular
+            - do: catch
+
+# When max-items is at the last level, it must be before 'do' otherwise it is ignored
+max_links_last_level_after_do_test_case_11:
+  div:
+      - id: col-C
+      - article:
+        - data-vr-contentbox: Noticia
+        - max-items: 0
+        - h1:
+          - class: titular
+          - do: catch
+          - max-items: 0
+
+
+# When max-items is at the last level and prior to do then the operation returned is a catch_all and all elements
+# of the type are taken
+max_links_last_level_prior_do_test_case_12:
+  div:
+      - id: col-C2
+      - h1:
+        - class: titular
+        - max-items: 0
+        - do: catch
+
+# Instructions that can't find any element due to parent node ain't found
+no_elements_found_test_case_13:
+  div:
+      - id: ID doesn't exist
+      - article:
+        - data-vr-contentbox: Noticia
+        - max-items: 0
+        - h1:
+          - class: titular
+          - do: catch
+
+# Instructions that can't find any element due to inner nodes ain't found
+no_elements_found_test_case_14:
+  div:
+      - id: col-D
+      - article:
+        - data-vr-contentbox: class doesn't exist
+        - max-items: 0
+        - h1:
+          - class: titular
+          - do: catch
+
+# Instructions that can't find any element due to last nodes ain't found
+no_elements_found_test_case_15:
+  div:
+      - id: col-D
+      - article:
+        - data-vr-contentbox: Noticia
+        - max-items: 0
+        - h1:
+          - class: class doesn't exist
+          - do: catch
+
+# Instructions that can't find any element due to inner node after find(div)->find_all(article)->find(aside) ain't found
+no_elements_found_test_case_16:
+  div:
+      - id: col-E
+      - article:
+        - data-vr-contentbox: Noticia
+        - max-items: 0
+        - aside:
+          - class: class doesn't exist
+          - h1:
+            - class: titular
+            - do: catch
+
+
+
+
+

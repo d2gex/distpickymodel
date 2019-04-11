@@ -1,0 +1,13 @@
+cover_section:
+  div:
+    - id: col-B
+    - aside:
+      - max-items: 0
+      - article:
+        - data-vr-contentbox: Noticia
+        - max-items: 0
+        - h1:
+          - class: titular
+          - a:
+            - do: catch
+
