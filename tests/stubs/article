@@ -1,0 +1,6 @@
+article_section:
+  div:
+    - class: text
+    - p:
+      - max-items: 0
+      - do: catch
