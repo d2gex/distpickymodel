@@ -1,6 +1,6 @@
-=======================================
-``Distpickymodel`` shared model library
-=======================================
+===========================================================
+``Distpickymodel`` shared Mongoengine-based model library
+===========================================================
 
 A library that is shared and used by different services of the distributed web scraper. The 'data relationship'
 diagram is shown below:
