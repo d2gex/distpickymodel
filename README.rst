@@ -1,5 +1,5 @@
 ===========================================================
-``Distpickymodel`` shared Mongoengine-based model library
+``distpickymodel`` shared Mongoengine-based model library
 ===========================================================
 
 .. image:: https://travis-ci.com/d2gex/distpickymodel.svg?branch=master
@@ -16,10 +16,10 @@ diagram is shown below:
     :alt: Database Relationship Model
     :target: #
 
-Installing Distpickymodel
+Installing distpickymodel
 ==========================
 
-Bleach is not available on PyPI_, so you need to install it with ``pip`` providing a GitHub path::
+distpickymodel is not available on PyPI_, so you need to install it with ``pip`` providing a GitHub path::
 
     $ pip install git+https://github.com/d2gex/distpickymodel.git@0.1.1#egg=distpickymodel
 
