@@ -163,6 +163,8 @@ class Sites(mongoengine.Document):
     def _enforce_only_one_active(instructions):
         '''Ensure that given in a given list of instructions only one record is active, if and only if, there is various
         records active. If no active records found the list of instructions is not modified
+
+        :param instructions: a list of Embedded Document objects
         '''
         any_active = None
         for instruction in instructions:
@@ -182,33 +184,34 @@ class Sites(mongoengine.Document):
 
     def save(self, *args, **kwargs):
         '''Overrides Mongoengine's Document.save method.It may perform one read and one save operation if pre_save
-        condition is met. It ensure that the field instructions contains only one active record. The difference with
-        update is that the underlying list in the database will be completely overriden by the new Docucment.instructions
-        field.
+        condition is met. It ensures that the field instructions contains only one active record. The difference with
+        update is that the underlying list in the database will be completely overwritten with the new
+        Docucment.instructions field.
         '''
 
         force_insert = kwargs.get('force_insert', False)
         if not force_insert:
             raise errors.DbModelOperationError(f"Method of {self.__class__.__name__.lower()}.save() can only be used "
                                                f"for inserts. Please use 'force_insert' parameter")
-        pre_save = kwargs.get('skip_pre_save', True)
-        if pre_save and self.instructions:  # 'pre_save' is not enforced for debugging purposes
+        pre_save = kwargs.get('pre_save', True)
+        if pre_save and self.instructions:
             self._enforce_only_one_active(self.instructions)
         return super().save(*args, **kwargs)
 
     def update(self, **kwargs):
         '''Overrides Mongoengine's Document.update method. It may perform one read and one update operation if pre_update
-        condition is met. It ensure that the field instructions contains only one active record.
+        condition is met. It ensures that the field instructions contains only one active record.
+
         '''
         upsert = kwargs.get('upsert', False)
         if upsert:
             raise errors.DbModelOperationError(f"Method of {self.__class__.__name__.lower()}.update() can only be "
                                                f"used for updates. Please do not use 'upsert' parameter")
-        pre_update = kwargs.get('skip_pre_update', True)
+        pre_update = kwargs.get('pre_update', True)
 
         instructions = kwargs.get('instructions', False)
         if instructions and pre_update:
-            self._pre_update(instructions)  # 'pre_update' is not enforced for debugging purposes
+            self._pre_update(instructions)
         return super().update(**kwargs)
 
 
